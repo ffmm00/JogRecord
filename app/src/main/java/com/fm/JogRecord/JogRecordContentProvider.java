@@ -14,13 +14,13 @@ public class JogRecordContentProvider extends ContentProvider {
 
     private static final int JOGRECORD = 10;
     private static final int JOGRECORD_ID = 20;
-    private static final String AUTHORITY = "com.fm.jogrecord.JogRecordProvider";
+    private static final String AUTHORITY = "com.fm.JogRecord.JogRecordProvider";
 
     private static final String BASE_PATH = "jogrecord";
-    private static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
+    public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
 
-    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE+"/jogrecord";
-    public static final String CONTEXT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE+"/jogrecord";
+    public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE+"/JogRecord";
+    public static final String CONTEXT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE+"/JogRecord";
     private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {

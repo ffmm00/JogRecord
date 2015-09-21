@@ -37,8 +37,8 @@ public class JogView extends ListActivity implements LoaderManager.LoaderCallbac
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader){
-        mAdapter.swapCursor(null);
+    public void onLoadFinished(Loader<Cursor> loader,Cursor cursor){
+        mAdapter.swapCursor(cursor);
     }
 
     @Override

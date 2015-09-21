@@ -8,13 +8,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MapsActivity">
 
-    <TaggleButton
+    <ToggleButton
         android:id="@+id/toggleButton"
         android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:leyout_width="wrap_content"
         android:textOff="@string/text_off"
         android:textOn="@string/text_on" />
 
@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/toggleButton"
         android:text="@string/eltime" />
+
 
     <Chronometer
         android:id="@+id/chronometer"

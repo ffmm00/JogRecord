@@ -37,7 +37,7 @@ public class WifiConfirmDialogFragment extends DialogFragment {
                 }).setPositiveButton(R.string.alert_dialog_yes,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        ((MapsActivity) getActivity().wifiOff());
+                        ((MapsActivity) getActivity()).wifiOff();
                     }
                 }
         ) .create();

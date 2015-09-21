@@ -40,5 +40,5 @@ public class SaveConfirmDialogFragment extends DialogFragment {
                     }
                 }).create();
 
-
+    }
     }
