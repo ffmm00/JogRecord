@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.view.View.OnClickListener;
 
 public class JogView extends ListActivity implements LoaderManager.LoaderCallbacks<Cursor>{
     private static final int CURSORLOADER_ID=0;

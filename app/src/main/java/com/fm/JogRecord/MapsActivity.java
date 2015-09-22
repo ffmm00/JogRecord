@@ -9,7 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Location;
-import android.location.LocationListener;
+
+
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.SystemClock;
@@ -29,6 +30,7 @@ import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListe
 import com.google.android.gms.location.FusedLocationProviderApi;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -39,7 +41,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-import java.sql.Connection;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -248,113 +250,105 @@ public class MapsActivity extends FragmentActivity implements ConnectionCallback
         mSpeed = (mMeter / 1000) / (elapsedTime / 1000) * 60 * 60;
     }
 
-    private void saveConfirmDialog(){
-        String message="時間：";
-        TextView disText=(TextView)findViewById(R.id.disText);
-        message=message+mChronometer.getText().toString()+" "+"距離"+disText.getText()+"\n"+"時速"+String.format("%.2f"+" km",mSpeed);
+    private void saveConfirmDialog() {
+        String message = "時間：";
+        TextView disText = (TextView) findViewById(R.id.disText);
+        message = message + mChronometer.getText().toString() + " " + "距離" + disText.getText() + "\n" + "時速" + String.format("%.2f" + " km", mSpeed);
 
-        DialogFragment newFragment=SaveConfirmDialogFragment.newInstance(R.string.save_confirm_dialog_title,message);
+        DialogFragment newFragment = SaveConfirmDialogFragment.newInstance(R.string.save_confirm_dialog_title, message);
         newFragment.show(getFragmentManager(), "dialog");
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
-        if(mGoogleApiClient.isConnected()){
+        if (mGoogleApiClient.isConnected()) {
             stopLocationUpdates();
         }
         mGoogleApiClient.disconnect();
     }
 
     @Override
-    protected void onStop(){
+    protected void onStop() {
         super.onStop();
-        if(mWifiOff)
+        if (mWifiOff)
             mWifi.setWifiEnabled(true);
     }
 
-    protected void stopLocationUpdates(){
+    protected void stopLocationUpdates() {
         fusedLocationProviderApi.removeLocationUpdates(mGoogleApiClient, this);
     }
 
     @Override
-    public void onConnectionSuspended(int cause){}
-
-    @Override
-    public void onConnectionFailed(ConnectionResult result){
+    public void onConnectionSuspended(int cause) {
     }
 
     @Override
-    public Loader<Address> onCreateLoader(int id,Bundle args){
-        double lat=args.getDouble("lat");
-        double lon =args.getDouble("lon");
-        return new AddressTaskLoader(this,lat,lon);
+    public void onConnectionFailed(ConnectionResult result) {
     }
 
     @Override
-    public void onLoadFinished(Loader<Address>loader,Address result){
-        if(result!=null){
-            StringBuilder sb=new StringBuilder();
-            for(int i=1;i<result.getMaxAddressLineIndex()+1;i++){
-                String item=result.getAddressLine(i);
-                if(item==null){
-                    break;}
+    public Loader<Address> onCreateLoader(int id, Bundle args) {
+        double lat = args.getDouble("lat");
+        double lon = args.getDouble("lon");
+        return new AddressTaskLoader(this, lat, lon);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Address> loader, Address result) {
+        if (result != null) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 1; i < result.getMaxAddressLineIndex() + 1; i++) {
+                String item = result.getAddressLine(i);
+                if (item == null) {
+                    break;
+                }
                 sb.append(item);
             }
-            TextView address=(TextView)findViewById(R.id.address);
+            TextView address = (TextView) findViewById(R.id.address);
             address.setText(sb.toString());
         }
     }
 
     @Override
-    public void onLoaderReset(Loader<Address>loader){}
-
-    public void saveJogViaCTP(){
-        String strDate=new SimpleDateFormat("yyyy/MM/dd").format(mStartTimeMillis);
-
-        TextView textAdress=(TextView)findViewById(R.id.address);
-
-        ContentValues values=new ContentValues();
-        values.put(DatabaseHelper.COLUMN_DATE,strDate);
-        values.put(DatabaseHelper.COLUMN_ELAPSEDTIME,mChronometer.getText().toString());
-        values.put(DatabaseHelper.COLUMN_DISTANCE,mMeter);
-        values.put(DatabaseHelper.COLUMN_SPEED,mSpeed);
-        values.put(DatabaseHelper.COLUMN_ADDRESS,textAdress.getText().toString());
-
-        Uri uri=getContentResolver().insert(JogRecordContentProvider.CONTENT_URI,values);
-        Toast.makeText(this,"データを保存しました",Toast.LENGTH_SHORT).show();
+    public void onLoaderReset(Loader<Address> loader) {
     }
 
-    public void saveJog(){
-        SQLiteDatabase db=mDpHelper.getWritableDatabase();
+    public void saveJogViaCTP() {
+        String strDate = new SimpleDateFormat("yyyy/MM/dd").format(mStartTimeMillis);
 
-        String strDate=new SimpleDateFormat("yyyy/MM/dd").format(mStartTimeMillis);
-        TextView textView=(TextView)findViewById(R.id.address);
-        ContentValues values=new ContentValues();
-        values.put(DatabaseHelper.COLUMN_DATE,strDate);
-        values.put(DatabaseHelper.COLUMN_ELAPSEDTIME,mChronometer.getText().toString());
-        values.put(DatabaseHelper.COLUMN_DISTANCE,mMeter);
-        values.put(DatabaseHelper.COLUMN_SPEED,mSpeed);
+        TextView textAdress = (TextView) findViewById(R.id.address);
+
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COLUMN_DATE, strDate);
+        values.put(DatabaseHelper.COLUMN_ELAPSEDTIME, mChronometer.getText().toString());
+        values.put(DatabaseHelper.COLUMN_DISTANCE, mMeter);
+        values.put(DatabaseHelper.COLUMN_SPEED, mSpeed);
+        values.put(DatabaseHelper.COLUMN_ADDRESS, textAdress.getText().toString());
+
+        Uri uri = getContentResolver().insert(JogRecordContentProvider.CONTENT_URI, values);
+        Toast.makeText(this, "データを保存しました", Toast.LENGTH_SHORT).show();
+    }
+
+    public void saveJog() {
+        SQLiteDatabase db = mDpHelper.getWritableDatabase();
+
+        String strDate = new SimpleDateFormat("yyyy/MM/dd").format(mStartTimeMillis);
+        TextView textView = (TextView) findViewById(R.id.address);
+        ContentValues values = new ContentValues();
+        values.put(DatabaseHelper.COLUMN_DATE, strDate);
+        values.put(DatabaseHelper.COLUMN_ELAPSEDTIME, mChronometer.getText().toString());
+        values.put(DatabaseHelper.COLUMN_DISTANCE, mMeter);
+        values.put(DatabaseHelper.COLUMN_SPEED, mSpeed);
         values.put(DatabaseHelper.COLUMN_ADDRESS, textView.getText().toString());
 
-        try{
-            db.insert(DatabaseHelper.TABLE_JOGRECORD,null,values);
-        }catch(Exception e){
-            Toast.makeText(this,"データの保存に失敗しました",Toast.LENGTH_SHORT).show();
-        }finally{db.close();
+        try {
+            db.insert(DatabaseHelper.TABLE_JOGRECORD, null, values);
+        } catch (Exception e) {
+            Toast.makeText(this, "データの保存に失敗しました", Toast.LENGTH_SHORT).show();
+        } finally {
+            db.close();
         }
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
     }
 
 }

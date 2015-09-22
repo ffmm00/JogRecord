@@ -34,7 +34,7 @@ public class ListAdapter extends CursorAdapter{
         tv_date.setText(date);
         tv_elapsed_time.setText(elapsedTime);
         tv_distance.setText(String.format("%.2f",distance/1000));
-        tv_speed.setText(String.format("%/2f",speed));
+        tv_speed.setText(String.format("%.2f",speed));
         tv_place.setText(address);
     }
 
